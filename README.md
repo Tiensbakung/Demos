@@ -1,2 +1,2 @@
-Demos
+Repo for various demo code snippets.
 =====
