@@ -93,11 +93,12 @@ def main():
     m.populate()
     scores = 0
     screen = pygame.display.set_mode((
-        m.width()*(SQUARE_WIDTH+SQUARE_MARGIN),
-        m.height()*(SQUARE_HEIGHT+SQUARE_MARGIN)
+        m.width() * (SQUARE_WIDTH+SQUARE_MARGIN),
+        m.height() * (SQUARE_HEIGHT+SQUARE_MARGIN) + 20
         ))
     pygame.display.set_caption('Same Game')
     clock = pygame.time.Clock()
+    font = pygame.font.Font(None, 20)
 
     while True:
         clock.tick(40)
@@ -110,19 +111,22 @@ def main():
                 row = y / (SQUARE_WIDTH+SQUARE_MARGIN)
                 col = x / (SQUARE_HEIGHT+SQUARE_MARGIN)
                 scores += m.remove_same_sqaures(row, col)
-                print 'scores: {}, remaining: {} squares'.format(
-                        scores, m.num_squares)
         screen.fill(BLACK)
         for i in range(m.height()):
             for j in range(m.width()):
                 c = COLORS[m.square_color(i,j)]
                 pygame.draw.rect(
-                    screen, c,
-                    (j*(SQUARE_WIDTH+SQUARE_MARGIN),
-                     i*(SQUARE_HEIGHT+SQUARE_MARGIN),
-                     SQUARE_WIDTH+SQUARE_MARGIN,
-                     SQUARE_HEIGHT+SQUARE_MARGIN),
-                     0)
+                                 screen, c,
+                                 (j * (SQUARE_WIDTH+SQUARE_MARGIN),
+                                  i * (SQUARE_HEIGHT+SQUARE_MARGIN),
+                                  SQUARE_WIDTH+SQUARE_MARGIN,
+                                  SQUARE_HEIGHT+SQUARE_MARGIN),
+                                 0
+                                )
+        text = 'scores: {} squares: {}'.format(scores, m.num_squares)
+        font_surface = font.render(text, True, WHITE)
+        screen.blit(font_surface, (0, m.height() * (
+                                   SQUARE_WIDTH+SQUARE_MARGIN)))
         pygame.display.update()
 
 
