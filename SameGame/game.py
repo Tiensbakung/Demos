@@ -69,7 +69,9 @@ class SquareModel:
                 self._data[i][j] = random.randint(1, self.num_colors)
 
     def remove_same_sqaures(self, row, col):
-        if not len(self.adjacent_same_sqaures(row, col)):
+        if not self._data[row][col]:
+            return 0
+        elif not len(self.adjacent_same_sqaures(row, col)):
             return 0
         D = deque([(row,col)])
         counter = 0
