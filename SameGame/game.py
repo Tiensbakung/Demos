@@ -18,6 +18,7 @@ BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
+SILVER = (170, 170, 170)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 COLORS = (BLACK, BLUE, GREEN, RED, WHITE, YELLOW)
@@ -32,8 +33,8 @@ class SquareModel:
         self.num_colors = num_colors
         self.col = col
         self.row = row
-        self.num_squares = row * col
         self._data = [[0 for j in range(col)] for i in range(row)]
+        self.num_squares = 0
 
     def _rearrange(self):
         for j in range(self.col):
@@ -67,6 +68,7 @@ class SquareModel:
         for i in range(self.row):
             for j in range(self.col):
                 self._data[i][j] = random.randint(1, self.num_colors)
+        self.num_squares = self.row * self.col
 
     def remove_same_sqaures(self, row, col):
         if not self._data[row][col]:
@@ -94,25 +96,30 @@ def main():
     m = SquareModel(12, 8)
     m.populate()
     scores = 0
-    screen = pygame.display.set_mode((
-        m.width() * (SQUARE_WIDTH+SQUARE_MARGIN),
-        m.height() * (SQUARE_HEIGHT+SQUARE_MARGIN) + 20
-        ))
-    pygame.display.set_caption('Same Game')
+    game_rect = pygame.Rect(0, 0, m.width() * (SQUARE_WIDTH+SQUARE_MARGIN),
+                            m.height() * (SQUARE_HEIGHT+SQUARE_MARGIN))
+    btn_new_rect = pygame.Rect(game_rect.right+20, game_rect.bottom-40, 100, 30)
+    screen = pygame.display.set_mode((game_rect.width+150, game_rect.height))
+    pygame.display.set_caption('Same Squares')
     clock = pygame.time.Clock()
-    font = pygame.font.Font(None, 20)
+    font1 = pygame.font.Font(None, 32)
+    font2 = pygame.font.Font(None, 24)
 
     while True:
-        clock.tick(40)
+        clock.tick(20)
         for e in pygame.event.get():
             if e.type == QUIT:
                 pygame.quit()
                 sys.exit()
             elif e.type == MOUSEBUTTONUP:
                 x, y = pygame.mouse.get_pos()
-                row = y / (SQUARE_WIDTH+SQUARE_MARGIN)
-                col = x / (SQUARE_HEIGHT+SQUARE_MARGIN)
-                scores += m.remove_same_sqaures(row, col)
+                if game_rect.collidepoint(x, y):
+                    row = y / (SQUARE_WIDTH+SQUARE_MARGIN)
+                    col = x / (SQUARE_HEIGHT+SQUARE_MARGIN)
+                    scores += m.remove_same_sqaures(row, col)
+                elif btn_new_rect.collidepoint(x, y):
+                    m.populate()
+                    scores = 0
         screen.fill(BLACK)
         for i in range(m.height()):
             for j in range(m.width()):
@@ -125,10 +132,17 @@ def main():
                                   SQUARE_HEIGHT+SQUARE_MARGIN),
                                  0
                                 )
-        text = 'scores: {} squares: {}'.format(scores, m.num_squares)
-        font_surface = font.render(text, True, WHITE)
-        screen.blit(font_surface, (0, m.height() * (
-                                   SQUARE_WIDTH+SQUARE_MARGIN)))
+        pygame.draw.line(screen, SILVER, (game_rect.right+2,0), (game_rect.right+2,game_rect.bottom), 3)
+        text = 'scores: {}'.format(scores)
+        font_surface = font1.render(text, True, WHITE)
+        screen.blit(font_surface, (game_rect.right + 8, 0))
+        text = 'squares: {}'.format(m.num_squares)
+        font_surface = font1.render(text, True, WHITE)
+        screen.blit(font_surface, (game_rect.right + 8, 30))
+        pygame.draw.rect(screen, SILVER, btn_new_rect, 5)
+        text = 'New Game'
+        font_surface = font2.render(text, True, GREEN)
+        screen.blit(font_surface, (btn_new_rect.left + 10, btn_new_rect.top + 6))
         pygame.display.update()
 
 
