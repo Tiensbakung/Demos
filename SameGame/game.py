@@ -3,9 +3,6 @@
 
 from collections import deque
 import random
-import sys
-from pprint import pprint
-import time
 
 import pygame
 from pygame.locals import *
@@ -109,8 +106,7 @@ def main():
         clock.tick(20)
         for e in pygame.event.get():
             if e.type == QUIT:
-                pygame.quit()
-                sys.exit()
+                return
             elif e.type == MOUSEBUTTONUP:
                 x, y = pygame.mouse.get_pos()
                 if game_rect.collidepoint(x, y):
