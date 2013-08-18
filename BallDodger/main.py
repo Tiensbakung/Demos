@@ -62,10 +62,10 @@ def main():
                         (0.2, screen_size[1]/ratio))
 
     robots = []
-    for i in range(6):
+    for i in range(8):
         pos = (ballsprite_size[0], random.uniform(0, screen_size[0]/3))
-        body = create_ball(w, g2b(pos), ballbody_radius, 1.0)
-        body.ApplyLinearImpulse((random.uniform(3,10), random.uniform(0,6)),
+        body = create_ball(w, g2b(pos), ballbody_radius, 0.7)
+        body.ApplyLinearImpulse((random.uniform(3,15), random.uniform(0,3)),
                                 body.worldCenter, True)
         sprite = BallSprite(pos, ballsprite_size)
         robots.append((body, sprite))
