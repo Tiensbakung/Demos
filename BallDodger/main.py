@@ -39,12 +39,12 @@ def g2b_y(y):
 
 def create_ball(w, pos, radius, density):
     ball = w.CreateDynamicBody(position=pos)
-    ball.CreateCircleFixture(radius=radius, density=density, restitution=0.8)
+    ball.CreateCircleFixture(radius=radius, density=density, restitution=1.0)
     return ball
 
 def create_wall(w, pos, size):
     wall = w.CreateStaticBody(position=pos)
-    wall.CreatePolygonFixture(box=(size[0]/2,size[1]/2), density=0)
+    wall.CreatePolygonFixture(box=(size[0]/2,size[1]/2), density=0, restitution=0.9)
     return wall
 
 
@@ -64,7 +64,7 @@ def main():
     robots = []
     for i in range(8):
         pos = (ballsprite_size[0], random.uniform(0, screen_size[0]/3))
-        body = create_ball(w, g2b(pos), ballbody_radius, 0.7)
+        body = create_ball(w, g2b(pos), ballbody_radius, 1.0)
         body.ApplyLinearImpulse((random.uniform(3,15), random.uniform(0,3)),
                                 body.worldCenter, True)
         sprite = BallSprite(pos, ballsprite_size)
